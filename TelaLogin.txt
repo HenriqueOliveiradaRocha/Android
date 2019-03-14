@@ -1,0 +1,33 @@
+package com.login.aluno.login;
+
+import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    public void Logar(View view){
+        EditText usuario = findViewById(R.id.UsuarioId);
+        EditText senha = findViewById(R.id.SenhaId);
+        String recebUsuario = usuario.getText().toString();
+        String recebSenha = senha.getText().toString();
+
+        if(recebUsuario.isEmpty() && recebSenha.isEmpty()){
+            Toast.makeText(MainActivity.this,"Digite algo na caixa de texto",Toast.LENGTH_SHORT).show();
+        }else if(recebUsuario.equals("admin") && recebSenha.equals("admin")){
+            Toast.makeText(MainActivity.this,"Login efetuado com sucesso",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(MainActivity.this,"Usuario não cadastrado",Toast.LENGTH_SHORT).show();
+        }
+    }
+}
