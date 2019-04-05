@@ -1,0 +1,64 @@
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        texto = findViewById(R.id.Texto);
+
+        try{
+
+            //Criar banco de dados
+
+            SQLiteDatabase bancoDeDados = openOrCreateDatabase("FirstDataBase", MODE_PRIVATE, null);
+
+            // Criar tabela
+
+            bancoDeDados.execSQL("CREATE TABLE IF NOT EXISTS pessoas (nome VARCHAR,idade INT(3))");
+
+
+            //Inserir dados
+
+
+           // bancoDeDados.execSQL("INSERT INTO pessoas(nome,idade) VALUES ('Henrique',23)");
+           // bancoDeDados.execSQL("INSERT INTO pessoas(nome,idade) VALUES ('Giovanna',19)");
+         //   bancoDeDados.execSQL("INSERT INTO pessoas(nome,idade) VALUES ('Milcer',53)");
+
+
+            //Recuperar dados
+
+
+           //String consulta = "SELECT nome,idade FROM pessoas WHERE nome = 'Henrique' AND idade = 23";
+           // String consulta = "SELECT nome,idade FROM pessoas WHERE idade >= 30 OR idade = 23";
+           //  String consulta = "SELECT nome,idade FROM pessoas WHERE idade IN(19,23)";
+           //  String consulta = "SELECT nome,idade FROM pessoas WHERE idade BETWEEN 18 AND 50";
+           //  String consulta = "SELECT nome,idade FROM pessoas WHERE nome LIKE '%i%'";
+           //  String consulta = "SELECT nome,idade FROM pessoas WHERE nome LIKE '%i%' ORDER BY nome ASC";
+             String consulta = "SELECT nome,idade FROM pessoas WHERE nome LIKE '%i%' ORDER BY nome DESC LIMIT 3";
+
+            Cursor cursor = bancoDeDados.rawQuery(consulta,null);
+
+            //Recuperar indece das tabelas
+
+            int indiceNome = cursor.getColumnIndex("nome");
+            int indiceIdade = cursor.getColumnIndex("idade");
+
+            cursor.moveToFirst();
+
+            while(cursor != null){
+
+                String nome = cursor.getString(indiceNome);
+                String idade = cursor.getString(indiceIdade);
+
+                Log.i("RESULTADO - nome",nome + " Idade" + idade );
+                texto.setText(cursor.getString(indiceNome));
+                cursor.moveToNext();
+
+            }
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+}
