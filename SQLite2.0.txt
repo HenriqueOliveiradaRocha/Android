@@ -1,0 +1,57 @@
+public class MainActivity extends AppCompatActivity {
+
+    private EditText nome;
+    private Button salvar;
+    private ListView lista;
+    private SQLiteDatabase db;
+    private List<String> itens = new ArrayList<>();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        nome = findViewById(R.id.TxtNome);
+        salvar = findViewById(R.id.bttSalvar);
+        lista = findViewById(R.id.ListView);
+
+        db = openOrCreateDatabase("DB",MODE_PRIVATE,null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS pessoas (nomes VARCHAR(30));");
+
+        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1,android.R.id.text1,itens);
+        lista.setAdapter(adapter);
+
+
+        salvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String txtNome = nome.getText().toString();
+
+                Salvar(txtNome);
+
+                nome.setText("");
+            }
+        });
+
+    }
+
+    public void Salvar(String txt){
+
+        try{
+
+        db.execSQL("INSERT INTO pessoas(nomes) VALUES ('"+ txt +"');");
+
+            Cursor c = db.rawQuery("SELECT nomes FROM pessoas",null);
+            c.moveToFirst();
+            do{
+                itens.add(c.getString(c.getColumnIndex("nomes")));
+            }while (c.moveToNext());
+            c.close();
+
+        } catch (Exception e){
+            Log.i("BD_ERROR","Error - "+e.getMessage());
+        }
+
+    }
+}
